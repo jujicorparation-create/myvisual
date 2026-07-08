@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "pvpmod",
+  "name": "Custom PvP Visual Mod",
+  "version": "${version}",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.example.pvpmod.PvpMod"
+    ],
+    "client": [
+      "com.example.pvpmod.client.PvpModClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
+
