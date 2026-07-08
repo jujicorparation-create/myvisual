@@ -70,45 +70,72 @@ public class InGameHudMixin {
                 }
             }
 
-            // 4. ARMOR HUD MODULI (YANGI QO'SHILGAN QISM)
+            // 4. ARMOR HUD MODULI
             for (Module mod : ModuleManager.getModules()) {
                 if (mod.getName().equalsIgnoreCase("Armor HUD") && mod.isEnabled()) {
-                    
-                    // Chizilishi kerak bo'lgan narsalar ro'yxati (Asosiy qo'l, va 4 ta bronya)
                     List<ItemStack> itemsToRender = new ArrayList<>();
                     itemsToRender.add(client.player.getMainHandStack());
-                    
-                    // Bronyalarni tartib bo'yicha olamiz (Shlem, Nagrudnik, Shim, Etik)
                     for (int i = 3; i >= 0; i--) {
                         itemsToRender.add(client.player.getInventory().getArmorStack(i));
                     }
 
-                    // Ekrandagi joylashuv koordinatalari (Hotbar-ning o'ng tomonida chizamiz)
                     int screenWidth = context.getScaledWindowWidth();
                     int screenHeight = context.getScaledWindowHeight();
-                    
-                    int armorX = screenWidth / 2 + 95; // Hotbardan o'ngroqda
-                    int armorY = screenHeight - 22;    // Hotbar bilan bir xil balandlikda
+                    int armorX = screenWidth / 2 + 95; 
+                    int armorY = screenHeight - 22;    
 
                     for (ItemStack stack : itemsToRender) {
                         if (stack != null && !stack.isEmpty()) {
-                            // 1. Bronya/Qurol ikonkasini ekranga chizish
                             context.drawItem(stack, armorX, armorY);
-                            // 2. Chidamlilik panelini (durability bar) chizish
                             context.drawItemInSlot(client.textRenderer, stack, armorX, armorY);
-
-                            // 3. Agar narsa sinadigan bo'lsa (qurol yoki bronya), qolgan chidamlilik sonini yozish
                             if (stack.isDamageable()) {
                                 int maxDamage = stack.getMaxDamage();
                                 int currentDamage = maxDamage - stack.getDamage();
-                                String durText = String.valueOf(currentDamage);
-                                
-                                // Matnni ikonkaning o'ng tomoniga chizamiz
-                                context.drawTextWithShadow(client.textRenderer, Text.literal(durText), armorX + 18, armorY + 4, 0xFFFFFFFF);
+                                context.drawTextWithShadow(client.textRenderer, Text.literal(String.valueOf(currentDamage)), armorX + 18, armorY + 4, 0xFFFFFFFF);
                             }
-                            
-                            // Keyingi bronya elementi uchun Y koordinatasini tepaga suramiz (vertikal ustun)
                             armorY -= 18;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            // 5. INVENTORY HUD MODULI (YANGI QO'SHILGAN QISM)
+            for (Module mod : ModuleManager.getModules()) {
+                if (mod.getName().equalsIgnoreCase("Inventory HUD") && mod.isEnabled()) {
+                    
+                    int screenWidth = context.getScaledWindowWidth();
+                    
+                    // Panelning ekrandagi o'rni (O'ng tomonda, teparoqda joylashadi)
+                    int invX = screenWidth - 170;
+                    int invY = 35;
+                    
+                    int slotSize = 18;
+                    int padding = 4;
+                    
+                    // Fon paneli: To'q shaffof qora fon va atrofida yupqa binafsha chegara
+                    context.fill(invX - padding, invY - padding, invX + (9 * slotSize) + padding, invY + (3 * slotSize) + padding, 0x990A0A0A);
+                    // Ustki neon binafsha dekoratsiya chizig'i
+                    context.fill(invX - padding, invY - padding, invX + (9 * slotSize) + padding, invY - padding + 2, 0xFF6A0DAD);
+
+                    // Minecraft inventaridagi asosiy 27 ta slot (9 dan 35 gacha bo'lgan indekslar)
+                    for (int row = 0; row < 3; row++) {
+                        for (int col = 0; col < 9; col++) {
+                            int slotIndex = 9 + (row * 9) + col;
+                            ItemStack stack = client.player.getInventory().getStack(slotIndex);
+                            
+                            int renderX = invX + (col * slotSize);
+                            int renderY = invY + (row * slotSize);
+                            
+                            // Slot katakchalarining orqa foni (biroz seziladigan kulrang tekis to'rtburchak)
+                            context.fill(renderX + 1, renderY + 1, renderX + slotSize - 1, renderY + slotSize - 1, 0x15FFFFFF);
+
+                            if (stack != null && !stack.isEmpty()) {
+                                // Predmet rasmini chizish
+                                context.drawItem(stack, renderX, renderY);
+                                // Predmet sonini (masalan, 64) chizish
+                                context.drawItemInSlot(client.textRenderer, stack, renderX, renderY);
+                            }
                         }
                     }
                     break;
