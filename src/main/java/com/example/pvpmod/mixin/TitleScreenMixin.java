@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.RenderLayer; // Yangi majburiy import
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,10 +59,10 @@ public class TitleScreenMixin extends Screen {
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         ci.cancel();
 
-        // 1.21+ uchun mutlaqo xatosiz, universal to'liq ekranli fon chizish metodi:
-        context.drawGuiTexture(CUSTOM_BACKGROUND, 0, 0, this.width, this.height);
+        // 1.21.4 uchun birinchi parametr sifatida RenderLayer::getGuiTextured majburiy!
+        context.drawGuiTexture(RenderLayer::getGuiTextured, CUSTOM_BACKGROUND, 0, 0, this.width, this.height);
         
-        // Shaffof qora yon panel (Tugmalar foni)
+        // Shaffof panel
         context.fill(0, 0, 240, this.height, 0x55000000);
         
         // Sarlavha matni
