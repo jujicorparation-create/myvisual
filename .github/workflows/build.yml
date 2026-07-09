@@ -1,4 +1,4 @@
-name: Build Fabric Mod
+name: Build Purple PvP Mod
 
 on:
   push:
@@ -11,37 +11,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Kodlarni yuklab olish (Checkout)
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Java 21 muhitini sozlash
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '21'
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-    - name: Loyihani qidirish va yig'ish (Dynamic Build)
-      run: |
-        # Repozitoriya ichidan gradlew faylini avtomatik qidirib topish
-        GRADLEW_PATH=$(find . -name "gradlew" -print -quit)
-        
-        if [ -z "$GRADLEW_PATH" ]; then
-          echo "Xatolik: gradlew fayli repozitoriyaning biror bir qismidan topilmadi!"
-          echo "Iltimos, loyihangiz fayllari GitHub-ga to'liq yuklanganini tekshiring."
-          exit 1
-        fi
-        
-        # Fayl joylashgan papka yo'lini aniqlash
-        DIR_PATH=$(dirname "$GRADLEW_PATH")
-        echo "Loyiha papkasi topildi: $DIR_PATH"
-        
-        # O'sha papkaga kirish, ruxsat berish va build qilish
-        cd "$DIR_PATH"
-        chmod +x gradlew
-        ./gradlew build
+      # GitHub Actions serverining o'ziga Gradle 8.11.1 o'rnatamiz
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.11.1
 
-    - name: Tayyor .JAR faylini saqlash (Upload Artifact)
-      uses: actions/upload-artifact@v4
-      with:
-        name: Purple-PvP-Mod
-        path: "**/build/libs/*.jar"
+      # Hech qanday ./gradlew faylisiz, to'g'ridan-to'g'ri tizim orqali build qilamiz
+      - name: Build Mod with Gradle
+        run: |
+          if [ -f gradle.properties ]; then
+            gradle build
+          elif [ -f myvisual/gradle.properties ]; then
+            cd myvisual && gradle build
+          else
+            gradle build
+          fi
+
+      # Tayyor bo'lgan Purple PvP Mod (.jar) faylini yuklab olishga tayyorlash
+      - name: Upload Built Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Purple-PvP-Mod
+          path: "**/build/libs/*.jar"
