@@ -1,6 +1,6 @@
 package com.example.pvpmod.module;
 
-public class Module {
+public abstract class Module {
     private final String name;
     private final Category category;
     private boolean enabled;
@@ -15,6 +15,10 @@ public class Module {
     public Category getCategory() { return category; }
     public boolean isEnabled() { return enabled; }
     
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public void toggle() {
         this.enabled = !this.enabled;
         if (enabled) {
@@ -27,8 +31,11 @@ public class Module {
     protected void onEnable() {}
     protected void onDisable() {}
 
+    // Faqat shu yerda VISUAL o'rniga PREVISUAL yozildi
     public enum Category {
-        VISUAL, MOVEMENT, MISC, RENDER
+        PREVISUAL, 
+        MOVEMENT, 
+        MISC, 
+        RENDER
     }
 }
-
