@@ -1,0 +1,41 @@
+name: Build Fabric Mod
+
+# Qaysi holatlarda avtomatik build ishga tushishini belgilaymiz
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    # Build jarayoni eng so'nggi Ubuntu operatsion tizimida bajariladi
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1-Qadam: GitHub repozitoriyangizdagi kodlarni virtual mashinaga yuklash
+    - name: Kodlarni yuklab olish (Checkout)
+      uses: actions/checkout@v4
+
+    # 2-Qadam: Fabric 1.21.4 va Java 21 mosligi uchun Temurin JDK 21 ni o'rnatish
+    - name: Java 21 muhitini sozlash
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    # 3-Qadam: Linux tizimida ./gradlew skriptini ishga tushirish uchun ruxsat berish
+    - name: Gradle ishga tushirish huquqini berish
+      run: chmod +x gradlew
+
+    # 4-Qadam: Fabric Loom yordamida modni kompilyatsiya qilish va yig'ish
+    - name: Modni build qilish (Yig'ish)
+      run: ./gradlew build
+
+    # 5-Qadam: Yig'ilgan tayyor .JAR fayllarini GitHub interfeysiga yuklash
+    - name: Tayyor .JAR faylini saqlash (Upload Artifact)
+      uses: actions/upload-artifact@v4
+      with:
+        name: Purple-PvP-Mod
+        path: build/libs/*.jar
+
