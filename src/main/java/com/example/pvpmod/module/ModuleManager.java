@@ -8,29 +8,29 @@ public class ModuleManager {
     private static final List<Module> modules = new ArrayList<>();
 
     public static void init() {
-        // VISUAL
-        modules.add(new Module("No HurtCam", Module.Category.VISUAL));
-        modules.add(new Module("FPS Counter", Module.Category.VISUAL));
-        modules.add(new Module("TPS", Module.Category.VISUAL));
-        modules.add(new Module("HUD", Module.Category.VISUAL));
-        modules.add(new Module("Armor HUD", Module.Category.VISUAL));
-        modules.add(new Module("Inventory HUD", Module.Category.VISUAL));
-        modules.add(new Module("AutoGapple", Module.Category.VISUAL));
-        modules.add(new Module("AutoTotem", Module.Category.VISUAL));
+        // 1. PREVISUAL (Bu yerda VISUAL so'zlari PREVISUAL ga muvaffaqiyatli almashtirildi)
+        modules.add(new Module("No HurtCam", Module.Category.PREVISUAL) {});
+        modules.add(new Module("FPS Counter", Module.Category.PREVISUAL) {});
+        modules.add(new Module("TPS", Module.Category.PREVISUAL) {});
+        modules.add(new Module("HUD", Module.Category.PREVISUAL) {});
+        modules.add(new Module("Armor HUD", Module.Category.PREVISUAL) {});
+        modules.add(new Module("Inventory HUD", Module.Category.PREVISUAL) {});
+        modules.add(new Module("AutoGapple", Module.Category.PREVISUAL) {});
+        modules.add(new Module("AutoTotem", Module.Category.PREVISUAL) {});
 
-        // MOVEMENT
-        modules.add(new Module("AutoSprint", Module.Category.MOVEMENT));
-        modules.add(new Module("AutoJump", Module.Category.MOVEMENT));
+        // 2. MOVEMENT
+        modules.add(new Module("AutoSprint", Module.Category.MOVEMENT) {});
+        modules.add(new Module("AutoJump", Module.Category.MOVEMENT) {});
 
-        // MISC
-        modules.add(new Module("Target Visual", Module.Category.MISC));
+        // 3. MISC
+        modules.add(new Module("Target Visual", Module.Category.MISC) {});
 
-        // RENDER
-        modules.add(new Module("NoRender", Module.Category.RENDER));
-        modules.add(new Module("FastPlace", Module.Category.RENDER));
-        modules.add(new Module("BeautyScoreboard", Module.Category.RENDER));
-        modules.add(new Module("Beauty Chat", Module.Category.RENDER));
-        modules.add(new Module("HUD Colors", Module.Category.RENDER));
+        // 4. RENDER
+        modules.add(new Module("NoRender", Module.Category.RENDER) {});
+        modules.add(new Module("FastPlace", Module.Category.RENDER) {});
+        modules.add(new Module("BeautyScoreboard", Module.Category.RENDER) {});
+        modules.add(new Module("Beauty Chat", Module.Category.RENDER) {});
+        modules.add(new Module("HUD Colors", Module.Category.RENDER) {});
     }
 
     public static List<Module> getModules() { return modules; }
@@ -39,4 +39,3 @@ public class ModuleManager {
         return modules.stream().filter(m -> m.getCategory() == category).collect(Collectors.toList());
     }
 }
-
