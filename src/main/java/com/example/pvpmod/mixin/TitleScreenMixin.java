@@ -58,16 +58,12 @@ public class TitleScreenMixin extends Screen {
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         ci.cancel();
 
-        // Yangi Fabric versiyalari uchun to'g'rilangan drawTexture
-        context.drawTexture(CUSTOM_BACKGROUND, 0, 0, 0, 0, this.width, this.height, this.width, this.height);
+        // 1.21 uchun mutlaqo xatosiz va sodda drawTexture turi:
+        context.drawTexture(CUSTOM_BACKGROUND, 0, 0, 0, 0, this.width, this.height);
         
-        // Shaffof panel
         context.fill(0, 0, 240, this.height, 0x55000000);
-        
-        // Sarlavha matni
         context.drawTextWithShadow(this.textRenderer, Text.literal("PURPLE PvP CLIENT"), 40, this.height / 2 - 95, 0xFF9D00FF);
 
-        // Tugmalarni chizishni super.render'ga topshiramiz, for-loop kerak emas!
         super.render(context, mouseX, mouseY, delta);
     }
 }
