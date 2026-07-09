@@ -20,15 +20,28 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Gradle ishga tushirish huquqini berish
-      run: chmod +x gradlew
-
-    - name: Modni build qilish (Yig'ish)
-      run: ./gradlew build
+    - name: Loyihani qidirish va yig'ish (Dynamic Build)
+      run: |
+        # Repozitoriya ichidan gradlew faylini avtomatik qidirib topish
+        GRADLEW_PATH=$(find . -name "gradlew" -print -quit)
+        
+        if [ -z "$GRADLEW_PATH" ]; then
+          echo "Xatolik: gradlew fayli repozitoriyaning biror bir qismidan topilmadi!"
+          echo "Iltimos, loyihangiz fayllari GitHub-ga to'liq yuklanganini tekshiring."
+          exit 1
+        fi
+        
+        # Fayl joylashgan papka yo'lini aniqlash
+        DIR_PATH=$(dirname "$GRADLEW_PATH")
+        echo "Loyiha papkasi topildi: $DIR_PATH"
+        
+        # O'sha papkaga kirish, ruxsat berish va build qilish
+        cd "$DIR_PATH"
+        chmod +x gradlew
+        ./gradlew build
 
     - name: Tayyor .JAR faylini saqlash (Upload Artifact)
       uses: actions/upload-artifact@v4
       with:
         name: Purple-PvP-Mod
-        path: build/libs/*.jar
-
+        path: "**/build/libs/*.jar"
