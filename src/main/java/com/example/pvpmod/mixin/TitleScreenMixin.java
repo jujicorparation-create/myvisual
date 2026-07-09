@@ -58,10 +58,13 @@ public class TitleScreenMixin extends Screen {
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         ci.cancel();
 
-        // 1.21 uchun mutlaqo xatosiz va sodda drawTexture turi:
-        context.drawTexture(CUSTOM_BACKGROUND, 0, 0, 0, 0, this.width, this.height);
+        // 1.21 va undan yuqori versiyalar uchun xatolarsiz ishlaydigan eng toza drawTexture turi:
+        context.drawTexture(CUSTOM_BACKGROUND, 0, 0, 0, 0, this.width, this.height, this.width, this.height);
         
+        // Shaffof panel
         context.fill(0, 0, 240, this.height, 0x55000000);
+        
+        // Sarlavha matni
         context.drawTextWithShadow(this.textRenderer, Text.literal("PURPLE PvP CLIENT"), 40, this.height / 2 - 95, 0xFF9D00FF);
 
         super.render(context, mouseX, mouseY, delta);
