@@ -20,27 +20,15 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    # Agar gradlew fayli to'g'ridan-to'g'ri rootda bo'lsa va shunchaki ruxsat yetmayotgan bo'lsa:
     - name: Gradle ishga tushirish huquqini berish
       run: chmod +x gradlew
-      continue-on-error: true # Agar fayl boshqa papkada bo'lsa xato berib to'xtab qolmaydi
 
-    # Agar fayllar ichki papkada bo'lsa, defaults.run qismidan foydalanamiz yoki path ko'rsatamiz
     - name: Modni build qilish (Yig'ish)
-      # "myvisual" o'rniga gradlew fayli turgan ichki papka nomini yozing. 
-      # Agar ichki papkada bo'lmasa, shunchaki './gradlew build' holatida qoldiring.
-      run: |
-        if [ -f gradlew ]; then
-          ./gradlew build
-        elif [ -f myvisual/gradlew ]; then
-          cd myvisual && chmod +x gradlew && ./gradlew build
-        else
-          echo "Gradlew topilmadi!" && exit 1
-        fi
+      run: ./gradlew build
 
     - name: Tayyor .JAR faylini saqlash (Upload Artifact)
       uses: actions/upload-artifact@v4
       with:
         name: Purple-PvP-Mod
-        # Agar ichki papkada bo'lsa: myvisual/build/libs/*.jar deb o'zgartiriladi
-        path: "**/build/libs/*.jar"
+        path: build/libs/*.jar
+
